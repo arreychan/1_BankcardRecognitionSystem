@@ -1,0 +1,408 @@
+$def with(post)
+<link rel="stylesheet" href="./static/css/bootstrap.min.css">
+<link rel="stylesheet" href="./static/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./static/css/shards.min.css">
+<link rel="stylesheet" href="./static/css/shards-demo.css?v=1.1.0">
+<link rel="stylesheet" href="./static/css/222.css">
+<link rel="shortcut icon" href="./static/img/lhj.ico">
+<title>银行卡识别系统</title>
+<script src="./static/js/jquery.js"></script>
+<script src="./static/js/jquery.form.js"></script>
+<script src="./static/js/helps.js"></script>
+<script src="./static/js/helps1.js"></script>
+<script src="./static/js/buttons.js"></script>
+<script src="./static/js/jquery-3.2.1.min.js"></script>
+<script src="./static/js/popper.min.js"></script>
+<script src="./static/js/bootstrap.min.js"></script>
+<script src="./static/js/shards.js"></script>
+<script src="./static/js/demo.min.js"></script>
+<script type="text/javascript">
+	function F_Open_dialog() {
+		document.getElementById("imageButton").click();
+	}
+</script>
+
+<script type="text/javascript">
+	//变量初始化，存储需要请求的数据
+	imgJson = {
+		"imgString": "",
+		"num": 0,
+		"url": "",
+		"result": "",
+		"timeTake": 0.0,
+		"textAngle": false,
+		"textLine": false,
+		'ocrFlag': false
+	};
+
+	imgBoxes = [];
+	imgRate = 1;
+</script>
+
+<body bgcolor="#0c1e28" id="top">
+
+	<div class="loader">
+		<div class="page-loader"></div>
+	</div>
+	<img src="./static/img/demo/shard-1-5x-3.gif" alt="Shard" class="shard" style="position: absolute;top: 100px">
+	<div class="welcome d-flex justify-content-center flex-column">
+		<div class="inner-wrapper mt-auto mb-auto">
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<h1 class="slide-in">蓝海鲸银行卡识别系统</h1>
+			<p class="slide-in" id="cc6">TRB教小虹写代码然后去吃黄金豆</p>
+			<div class="action-links slide-in image-input-container">
+
+				<a href="#cc3" class="btn btn-white btn-pill align-self-center mr-2" onclick="F_Open_dialog()"> <i
+						class="fa fa-image mr-1"></i> 相册模式</a>
+				<a href="#cc2" class="btn btn-pill btn-outline-white align-self-center mr-2"><i
+						class="fa fa-camera mr-1"></i> 相机模式</a>
+			</div>
+		</div>
+		<div>&nbsp;</div>
+
+
+	</div>
+
+	<div style="display: none">
+		<div>
+
+			<span class="margin-r" style="font-size:100%">文字方向检测</span>
+			<label class="el-switch el-switch-sm">
+				<input type="checkbox" name="switch" id="textAngle">
+				<span class="el-switch-style"></span>
+			</label>
+
+			<span class="margin-r" style="font-size:110%">单行文字识别</span>
+			<label class="el-switch el-switch-sm">
+				<input type="checkbox" name="switch" id="textLine">
+				<span class="el-switch-style"></span>
+			</label>
+		</div>
+		<br>
+		<div>
+
+			$for i,bill in enumerate(post['billList']):
+			<div style="font-size:10px" class="class_div" onclick="getBill('$bill',this,$i)">
+				<span class="margin-r" style="font-size:110%">$bill</span>
+				<label class="el-switch el-switch-sm">
+					<input type="checkbox" name="switch" id="billModel_$i">
+					<span class="el-switch-style"></span>
+				</label>
+			</div>
+
+		</div>
+		<br>
+
+	</div>
+
+
+
+
+	<div class="text-center " style="background-color:#0C1E28;margin: auto">
+		<table width="90%" border="1" bordercolor="#0C1E28"
+			style="margin: auto;border-collapse: separate; border-spacing: 0px 50px">
+			<tr>
+				<td colspan="2" align="center"></td>
+			</tr>
+			<tr>
+			<tr>
+				<td colspan="2" align="center"></td>
+			</tr>
+			<tr>
+			<tr>
+				<td colspan="2" align="center"><a href="#" name="cc2"></a></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"></td>
+			</tr>
+			<tr>
+			<tr>
+				<td colspan="2" align="right">
+
+					<input type="button" class="btn btn-outline-primary  btn-squared"
+						value="&nbsp;&nbsp;&nbsp;&nbsp;拍照识别&nbsp;&nbsp;&nbsp;&nbsp;" onclick="takePhoto()"
+						onMouseUp="gulite()">
+				</td>
+			</tr>
+
+			<tr>
+				<td style="color:#ffffff;font-weight:bold;font-size:30px;vertical-align: top;text-align:center;font-family: '等线';"
+					width="50%">
+					[&nbsp;拍照区&nbsp;]<br />
+					<div>&nbsp;</div>
+					<video id="video" width="500px" height="300px" autoplay="autoplay"></video>
+				</td>
+				<td style="color:#ffffff;font-weight:bold;font-size:30px;text-align:center;font-family: '等线';"
+					width="50%">
+					[&nbsp;识别区&nbsp;]<br />
+					<div>&nbsp;</div>
+
+					<img id='Preview' width="500px" height="300px" src="./static/img/11.png" alt="暂无图片"
+						style="z-index:2;"></img>
+					<canvas id="myCanvas" width="500px" height="300px"
+						style="margin-left:-500px;position: absolute;z-index:9999; "></canvas>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center" height="100px"></td>
+			</tr>
+		</table>
+
+
+
+	</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div style="background-color:#0C1E28 ">&nbsp;</div>
+	<div class="text-center canvas-container" style="background-color:#0C1E28;">
+		<table width="90%" border="1" bordercolor="#0C1E28"
+			style="margin: auto;border-collapse: separate;background:#0C1E28 ;height: 500px;">
+			<tr>
+				<td style="font-weight:bold;text-align:right;font-family: '等线';" height="5%">
+					<a href="#" name="cc3">
+
+				</td>
+			</tr>
+			<tr>
+				<td height="20%">
+				</td>
+			</tr>
+			<tr>
+				<td style="font-weight:bold;text-align:right;font-family: '等线';" height="10%">
+					<input type="file" id="imageButton" style="display:none" class="image-local-input"
+						accept="image/png, image/bmp, image/jpg, image/jpeg"
+						onchange="FunimgPreview('imageButton','Preview1','myCanvas1')">
+					<button type="button" class="btn btn-outline-primary btn-squared" id='imageButton'
+						onMouseUp="gulite()">&nbsp;&nbsp;&nbsp;&nbsp;查看结果&nbsp;&nbsp;&nbsp;&nbsp;</button>
+
+				</td>
+			</tr>
+			<tr>
+
+				<td style="display:table-cell; text-align:center;">
+
+					<img id='Preview1' width="500px" height="300px" src="./static/img/11.png"
+						style="position: absolute; z-index:1;"></img>
+					<canvas id="myCanvas1" width="500px" height="300px" style="position: absolute;z-index:9999">
+					</canvas>
+				</td>
+
+			</tr>
+		</table>
+	</div>
+	<div style="background-color:#0C1E28 ">
+		<table border="1" bordercolor="#0C1E28"
+			style="margin: auto;border-collapse: separate;background:#0C1E28 ;height: 1000px;">
+			<tr>
+				<td></td>
+			</tr>
+		</table>
+
+		<div class="footer-cta" style="background-color:#0C1E28">
+			<a href="#" name="lanhaijin"></a>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div class="text-center">
+				<h2>
+					<font color="#53BFFB" style="font-family: '等线';">—— 识别结果 ——</font>
+				</h2>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<table width="80%" border="2px" bordercolor="#53BFFB" style="margin: auto;">
+					<tr>
+						<td style="color:#53BFFB;font-family: '等线'; font-weight:bold;font-size:25px;" colspan="2">
+							<div class="json">
+								<div class="json-request-title" id="billmodelname">$post.get('name')</div>
+								<div style="height:415px; overflow:auto;">
+									<div id="billNameList"></div>
+									<div id="mytable"></div>
+								</div>
+
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div><img id='loadingGif' width="600" height="600" src="./static/img/loading.gif"
+						style="position:absolute;left: 50%; bottom:-3800px ; transform: translate(-50%, -50%) scale(0.5);z-index:3;display: none"></img>
+				</div>
+			</div>
+
+		</div>
+		<div class="alert alert-warning alert-dismissible fade show" role="alert" style="text-align: center"><a
+				href="#top" target="_self">
+				<button type="button" class="btn btn-warning btn-squared" id="cc5">
+					<i class="fa fa-up"></i>
+					<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;👆&nbsp;&nbsp;回到顶部！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+				</button></a>
+		</div>
+		<footer class="main-footer py-5">
+			<p class="text-muted text-center small p-0 mb-4">&copy; 版权所有 2019 &mdash; &nbsp;&nbsp;蓝海鲸项目组</p>
+		</footer>
+	</div>
+
+	<!-- JavaScript -->
+
+	<script type="text/javascript">
+		//点击文件,自动提交文件，进行识别
+		//jQuery('#imageButton').on('change', function()  
+		//          {  
+		//          });
+
+		function getBill(value, that, index) {
+			//勾选需要识别的类型
+			var divStyle = document.getElementsByClassName("class_div");
+			for (var i = 0; i < divStyle.length; i++) {
+				if (index == i) {
+					document.getElementById("billModel_" + i).checked = true;
+				} else {
+					document.getElementById("billModel_" + i).checked = false;
+				}
+			}
+
+			imgJson.billModel = value;
+		}
+		window.onload = function () {
+			getMedia();
+
+		}
+		//setInterval(cycle,700); //动画显示box   
+		function getMedia() {
+			var constraints = {
+				video: {
+					width: 500,
+					height: 300
+				},
+				audio: false
+			};
+			//获得video摄像头区域
+			var video = document.getElementById("video");
+			//这里介绍新的方法，返回一个 Promise对象
+			// 这个Promise对象返回成功后的回调函数带一个 MediaStream 对象作为其参数
+			// then()是Promise对象里的方法
+			// then()方法是异步执行，当then()前的方法执行完后再执行then()内部的程序
+			// 避免数据没有获取到
+			var promise = navigator.mediaDevices.getUserMedia(constraints);
+			promise.then(function (MediaStream) {
+				video.srcObject = MediaStream;
+				video.play();
+			});
+		}
+
+		function takePhoto() {
+			//获得Canvas对象
+			var video = document.getElementById("video");
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext('2d');
+			var Preview = document.getElementById("Preview");
+			ctx.drawImage(video, 0, 0, 500, 300);
+
+
+
+			var strDataURI = ctx.getImageData(0, 0, 500, 300);
+			// console.log(strDataURI);
+			jQuery("#Preview").attr("src", strDataURI);
+			// console.log(canvas.getContext('2d'));
+
+			var imgString = document.getElementById("myCanvas").toDataURL("image/jpg", 1); // canvas转换成base64位
+
+			FunimgPreview1(imgString, 'Preview', 'myCanvas');
+			setInterval(cyclePhoto, 700); //动画显示box  
+
+		}
+	</script>
+	<script type="text/javascript">
+		//点击文件,自动提交文件，进行识别
+		jQuery('#imageButton').on('change', function () {});
+		jQuery(function () {
+			var w = jQuery(document.body).outerWidth(true);
+
+			var l = (w - 500) / 2;
+
+			jQuery("#Preview1").css("left", l);
+			jQuery("#myCanvas1").css("left", l);
+		})
+
+		function getBill(value, that, index) {
+			//勾选需要识别的类型
+			var divStyle = document.getElementsByClassName("class_div");
+			for (var i = 0; i < divStyle.length; i++) {
+				if (index == i) {
+					document.getElementById("billModel_" + i).checked = true;
+				} else {
+					document.getElementById("billModel_" + i).checked = false;
+				}
+			}
+
+			imgJson.billModel = value;
+
+		}
+
+
+		//setInterval(cycle1,700); //动画显示box  
+		function gulite() {
+			var worui;
+			worui = setTimeout(ssss, 800);
+		}
+
+		function ssss() {
+			window.location.href = '#lanhaijin';
+		}
+	</script>
+
+	<script type="text/javascript">
+		/* 鼠标特效 */
+		var a_idx = 0;
+		jQuery(document).ready(function ($$) {
+			$$("body").click(function (e) {
+				var a = new Array("🐳", "🐹", "🐮", "🐯", "🐰", "🐉", "🐍", "🐴", "🐐", "🙉", "🐔", "🐶",
+					"🐷", "🐋", "🐺", "😺", "🐗", "🐣");
+				var $$i = $$("<span></span>").text(a[a_idx]);
+				a_idx = (a_idx + 1) % a.length;
+				var x = e.pageX,
+					y = e.pageY;
+				$$i.css({
+					"z-index": 99999,
+					"top": y - 20,
+					"left": x,
+					"position": "absolute",
+					"font-weight": "bold",
+					"color": "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," +
+						~~(255 * Math.random()) + ")"
+				});
+				$$("body").append($$i);
+				$$i.animate({
+						"top": y - 180,
+						"opacity": 0
+					},
+					1500,
+					function () {
+						$$i.remove();
+					});
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		var button = document.querySelector('#cc5');
+		var div = document.querySelector('#cc6');
+		button.onclick = function () {
+			div.textContent = 'Copyright 2019, Design by Chen Errui';
+		}
+	</script>
+	<script type="text/javascript">
+		$$(document.body).css({
+			"overflow-x": "hidden",
+			"overflow-y": "hidden"
+		})
+	</script>
+
+</body>

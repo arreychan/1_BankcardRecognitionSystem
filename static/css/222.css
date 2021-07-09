@@ -1,0 +1,31 @@
+
+/* CSS Document */
+table.gridtable {
+	font-family:'等线';
+	font-size:20px;
+	color:#0C1E28;
+	border-width: 10px;
+	border-color: #53BFFB;
+	border-collapse: collapse;
+	width: 100%;
+}
+table.gridtable th {
+	color: #53BFFB;
+	border-width: 3px;
+	padding: 10px;
+	border-style: dashed;
+	border-color:#53BFFB;
+	background-color: #0C1E28;
+}
+table.gridtable td {
+	color: #53BFFB;
+	border-width: 3px;
+	padding: 10px;
+	border-style: dashed;
+	border-color: #53BFFB;
+	background-color: #0C1E28;
+}
+
+.loading{display: none; position: absolute; top: 50%; left: 50%; z-index:1002; }
+.class_div{ display:inline} 
+
